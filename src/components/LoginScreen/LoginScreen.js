@@ -5,8 +5,8 @@ import { auth } from '../../config/firebase';
 import styles from './styles';
 
 export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState('pratik@gmail.com');
-  const [password, setPassword] = useState('123456');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
     try {
@@ -19,6 +19,9 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>
+        Login
+      </Text>
       <TextInput
         placeholder="Email"
         onChangeText={setEmail}
@@ -35,7 +38,7 @@ export default function LoginScreen({ navigation }) {
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
       <TouchableOpacity style={[styles.button, styles.secondaryButton]} onPress={() => navigation.navigate('Registration')}>
-        <Text style={styles.buttonText}>Sign Up</Text>
+        <Text style={styles.secondaryButtonText}>Sign Up</Text>
       </TouchableOpacity>
     </View>
   );

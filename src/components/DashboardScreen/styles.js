@@ -3,35 +3,40 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#F5F3FF', 
+    paddingHorizontal: 16,
   },
-  eventCard: {
-    marginBottom: 15,
-    padding: 15,
-    backgroundColor: '#ffffff',
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
+  card: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 16,
+    shadowColor: '#4B3F72',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 4,
+    borderLeftWidth: 6,
+    borderLeftColor: '#4B3F72', 
   },
-  eventTitle: {
+  cardContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  textContainer: {
+    flex: 1,
+    paddingRight: 8,
+  },
+  title: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: '700',
+    color: '#4B3F72', 
+    marginBottom: 6,
   },
-  eventText: {
+  subtitle: {
     fontSize: 14,
-    color: '#777',
-  },
-  favoriteIcon: {
-    position: 'absolute',
-    top: 15,
-    right: 15,
-    // Added a style to adjust the icon size
-    width: 24,
-    height: 24,
+    color: '#5C5C5C', 
+    marginBottom: 2,
   },
 });

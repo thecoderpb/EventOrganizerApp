@@ -12,10 +12,11 @@ export default function FavouritesScreen({ navigation }) {
     const q = query(collection(db, 'events'));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const favs = [];
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        if (data.favouritedBy?.includes(auth.currentUser.uid)) {
-          favs.push({ id: doc.id, ...data });
+      querySnapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        const favList = data.favouritedBy ?? [];
+        if (favList.includes(auth.currentUser.uid)) {
+          favs.push({ id: docSnap.id, ...data });
         }
       });
       setFavouriteEvents(favs);
@@ -26,62 +27,53 @@ export default function FavouritesScreen({ navigation }) {
 
   const toggleFavourite = async (eventId) => {
     const eventRef = doc(db, 'events', eventId);
-    const eventDoc = await getDoc(eventRef);
-    const eventData = eventDoc.data();
+    const eventSnap = await getDoc(eventRef);
+    const eventData = eventSnap.data();
+    let favs = eventData.favouritedBy ?? [];
 
-    let newFavourites = [...eventData.favouritedBy];
-
-    if (newFavourites.includes(auth.currentUser.uid)) {
-      newFavourites = newFavourites.filter((id) => id !== auth.currentUser.uid);
+    if (favs.includes(auth.currentUser.uid)) {
+      favs = favs.filter((id) => id !== auth.currentUser.uid);
     } else {
-      newFavourites.push(auth.currentUser.uid);
+      favs.push(auth.currentUser.uid);
     }
 
     try {
-      await updateDoc(eventRef, {
-        favouritedBy: newFavourites,
-      });
-    } catch (error) {
-      console.error('Error updating favourite:', error);
+      await updateDoc(eventRef, { favouritedBy: favs });
+    } catch (err) {
+      console.error("Error updating favourites:", err);
     }
   };
 
-  const renderEvent = ({ item }) => (
+  const renderItem = ({ item }) => (
     <TouchableOpacity
       onPress={() => navigation.navigate('ViewEvent', { event: item })}
-      style={{
-        marginBottom: 15,
-        padding: 15,
-        backgroundColor: '#ffffff',
-        borderRadius: 12,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
-        elevation: 5,
-        position: 'relative',
-      }}
+      style={styles.card}
     >
-      <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.title}</Text>
-      <Text style={{ fontSize: 14, color: '#777' }}>{item.date}</Text>
-      <Text style={{ fontSize: 14, color: '#777' }}>{item.organizer}</Text>
-      <MaterialIcons
-        name="favorite"
-        size={24}
-        color="#FF0000"
-        style={{ position: 'absolute', top: 15, right: 15 }}
-        onPress={() => toggleFavourite(item.id)}
-      />
+      <View style={styles.cardHeader}>
+        <Text style={styles.title}>{item.title}</Text>
+        <MaterialIcons
+          name="favorite"
+          size={24}
+          color="#FF0000"
+          onPress={() => toggleFavourite(item.id)}
+        />
+      </View>
+      <Text style={styles.subtitle}>{item.date}</Text>
+      <Text style={styles.subtitle}>{item.organizer}</Text>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={favouriteEvents}
-        keyExtractor={(item) => item.id}
-        renderItem={renderEvent}
-      />
+      {favouriteEvents.length === 0 ? (
+        <Text style={styles.emptyText}>No favourite events yet.</Text>
+      ) : (
+        <FlatList
+          data={favouriteEvents}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+        />
+      )}
     </View>
   );
 }

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, FlatList, Text, TouchableOpacity } from 'react-native';
+import { View, FlatList, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { db, auth } from '../../config/firebase';
-import { collection, onSnapshot, query, where, doc, updateDoc, getDoc } from 'firebase/firestore';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'; // Import MaterialIcons
+import { collection, onSnapshot, query, doc, updateDoc, getDoc } from 'firebase/firestore';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styles from './styles';
+
 
 export default function DashboardScreen({ navigation }) {
   const [events, setEvents] = useState([]);
@@ -32,12 +33,12 @@ export default function DashboardScreen({ navigation }) {
     const eventDoc = await getDoc(eventRef);
     const eventData = eventDoc.data();
 
-    let newFavourites = [...eventData.favouritedBy];
+    let newFavourites = [...(eventData.favouritedBy || [])];
 
     if (newFavourites.includes(auth.currentUser.uid)) {
-      newFavourites = newFavourites.filter((id) => id !== auth.currentUser.uid); // Remove from favourites
+      newFavourites = newFavourites.filter((id) => id !== auth.currentUser.uid);
     } else {
-      newFavourites.push(auth.currentUser.uid); // Add to favourites
+      newFavourites.push(auth.currentUser.uid);
     }
 
     try {
@@ -50,28 +51,36 @@ export default function DashboardScreen({ navigation }) {
   };
 
   const renderEvent = ({ item }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('ViewEvent', { event: item })}>
-      <View style={styles.eventCard}>
-        <Text style={styles.eventTitle}>{item.title}</Text>
-        <Text style={styles.eventText}>{item.date}</Text>
-        <Text style={styles.eventText}>{item.organizer}</Text>
-        <MaterialIcons
-          name={favourites.includes(item.id) ? "favorite" : "favorite-border"} // Toggle icon
-          size={24}
-          color="#FF0000"
-          style={styles.favoriteIcon}
-          onPress={() => toggleFavourite(item.id)} // Toggle favourite on press
-        />
+    <TouchableOpacity
+      onPress={() => navigation.navigate('ViewEvent', { event: item })}
+      style={styles.card}
+      activeOpacity={0.8}
+    >
+      <View style={styles.cardContent}>
+        <View style={styles.textContainer}>
+          <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.subtitle}>{item.date}</Text>
+          <Text style={styles.subtitle}>Organized by {item.organizer}</Text>
+        </View>
+        <TouchableOpacity onPress={() => toggleFavourite(item.id)}>
+          <MaterialIcons
+            name={favourites.includes(item.id) ? "favorite" : "favorite-border"}
+            size={26}
+            color={favourites.includes(item.id) ? "#E91E63" : "#B0B0B0"}
+          />
+        </TouchableOpacity>
       </View>
     </TouchableOpacity>
   );
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <FlatList
         data={events}
         keyExtractor={(item) => item.id}
         renderItem={renderEvent}
+        contentContainerStyle={{ paddingBottom: 20 }}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );

@@ -4,6 +4,7 @@ import CreateEventScreen from "../CreateEventsScreen/CreateEventsScreen";
 import DashboardScreen from "../DashboardScreen/DashboardScreen";
 import FavouritesScreen from "../FavouritesScreen/FavouritesScreen";
 import { SafeAreaView } from "react-native-safe-area-context";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 const Tab = createBottomTabNavigator();
 
@@ -11,18 +12,28 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Tab.Navigator
-
-        screenOptions={{
+        screenOptions={({ route }) => ({
           headerShown: false,
-          tabBarActiveTintColor: "#007BFF",
+          tabBarActiveTintColor: "#4B3F72",
           tabBarInactiveTintColor: "gray",
-          tabBarLabelStyle: { fontSize: 14 },
+          tabBarLabelStyle: { fontSize: 13, fontWeight: "600" },
           tabBarStyle: {
-            paddingBottom: 5,
-            height: 60,
+            backgroundColor: "#F8F8FF",
+            borderTopLeftRadius: 15,
+            borderTopRightRadius: 15,
+            height: 50,
+            paddingBottom: 8,
           },
+          tabBarIcon: ({ color, size }) => {
+            let iconName;
 
-        }}
+            if (route.name === "Dashboard") iconName = "dashboard";
+            else if (route.name === "Create Event") iconName = "event";
+            else if (route.name === "Favourites") iconName = "favorite";
+
+            return <MaterialIcons name={iconName} size={24} color={color} />;
+          },
+        })}
       >
         <Tab.Screen name="Dashboard" component={DashboardScreen} />
         <Tab.Screen name="Create Event" component={CreateEventScreen} />

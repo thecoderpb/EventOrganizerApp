@@ -1,50 +1,59 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    backgroundColor: "#F5F3FF", // Soft lavender background
+  },
   container: {
-    flexGrow: 1,
     padding: 20,
-    backgroundColor: '#fff',
+    paddingBottom: 100,
   },
   label: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "600",
+    color: "#4B3F72",
     marginTop: 20,
-    color: '#333',
   },
   value: {
     fontSize: 16,
-    marginTop: 6,
-    color: '#555',
-  },
-  deleteButton: {
-    width: '100%',
-    paddingVertical: 14,
-    borderRadius: 8,
-    backgroundColor: '#007BFF', // Blue color for both buttons
-    marginTop: 10,
-  },
-  deleteButtonRed: {
-    width: '100%',
-    paddingVertical: 14,
-    borderRadius: 8,
-    backgroundColor: 'red',
-    marginTop: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  wrapper: {
-    flex: 1,
-    backgroundColor: '#fff',
+    color: "#333",
+    marginTop: 5,
+    lineHeight: 22,
+    backgroundColor: "#fff",
+    padding: 12,
+    borderRadius: 10,
+    elevation: 2,
   },
   deleteContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
     padding: 20,
     borderTopWidth: 1,
-    borderColor: '#eee',
-    backgroundColor: '#fff',
+    borderColor: "#ddd",
+    backgroundColor: "#fff",
+  },
+  deleteButton: {
+    backgroundColor: "#4B3F72",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    flex: 1,
+    marginRight: 10,
+    alignItems: "center",
+  },
+  deleteButtonRed: {
+    backgroundColor: "#D90429",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    flex: 1,
+    marginLeft: 10,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
   },
 });
